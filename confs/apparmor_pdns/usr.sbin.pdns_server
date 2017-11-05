@@ -1,0 +1,35 @@
+# vim:syntax=apparmor
+# Last Modified: Tue Mar 17 13:21:30 2016 +0100
+#include <tunables/global>
+
+/usr/sbin/pdns_server {
+  #include <abstractions/base>
+  #include <abstractions/nameservice>
+  #include <abstractions/user-tmp>
+  #include <abstractions/pdns>
+
+  capability dac_override,
+  capability sys_resource,
+  capability sys_chroot,
+  capability setgid,
+  capability setuid,
+  capability ipc_lock,
+  capability kill,
+  capability chown,
+
+  network tcp,
+  network udp,
+
+  /etc/powerdns/** r,
+  /etc/passwd r,
+  /etc/localtime r,
+  /etc/hosts r,
+  /usr/sbin/pdns_server mr,
+  /lib/x86_64-linux-gnu/* r,
+  /usr/lib/* r,
+  /usr/lib/x86_64-linux-gnu/* r,
+  /usr/sbin/pdns_server ix,
+
+  # Site-specific additions and overrides. See local/README for details.
+  #include <local/usr.sbin.pdns>
+}

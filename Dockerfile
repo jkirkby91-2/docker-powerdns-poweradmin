@@ -15,6 +15,8 @@ RUN apt-get update && apt-get install -y \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+COPY confs/apparmor_pdns /etc/apparmor.d/apparmor_pdns
+
 COPY confs/pdns/pdns.conf /etc/powerdns/pdns.conf
 COPY confs/pdns/pdns.d/ /etc/powerdns/pdns.d/
 COPY confs/poweradmin/config.inc.php /srv/
