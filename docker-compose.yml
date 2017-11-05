@@ -1,0 +1,60 @@
+version: "3"
+services:
+  healerOpsPdnsMaster:
+    image: jkirkby/docker-powerdns:latest
+    ports:
+    - "2253:53"
+    - "2253:53/udp"
+    environment:
+    - PDNS_ALLOW_AXFR_IPS=127.0.0.1
+    - PDNS_DISTRIBUTOR_THREADS=3
+    - PDNS_CACHE_TTL=20
+    - PDNS_RECURSIVE_CACHE_TTL=10
+    - MYSQL_HOST=[[chqngeme]]
+    - MYSQL_PORT=3306
+    - MYSQL_USER=[[changeme]]
+    - MYSQL_DB=[[changeme]]
+    - DB_ENV_MYSQL_ROOT_PASSWORD=[[CHANGEME]]
+    - PDNS_MASTER=yes
+    - POWERADMIN_NS1=[[changeme]]
+    - POWERADMIN_NS2=[[changeme]]
+    volumes:
+      - /srv/poweradmin:/srv/www
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+      labels: [APP=powerdnsmaster]
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
+
+  healerOpsPdnsSlave:
+    image: jkirkby/docker-powerdns:latest
+    ports:
+    - "3353:53"
+    - "3353:53/udp"
+    environment:
+    - PDNS_ALLOW_AXFR_IPS=127.0.0.1
+    - PDNS_DISTRIBUTOR_THREADS=3
+    - PDNS_CACHE_TTL=20
+    - PDNS_RECURSIVE_CACHE_TTL=10
+    - MYSQL_HOST=[[changeme]]
+    - MYSQL_PORT=3306
+    - MYSQL_USER=[[changeme]]
+    - MYSQL_DB=[[changeme]]
+    - DB_ENV_MYSQL_ROOT_PASSWORD=[[CHANGEME]]
+    - PDNS_MASTER=no
+    - PDNS_SLAVE=yes
+    - POWERADMIN_NS1=[[changeme]]
+    - POWERADMIN_NS2=[[changeme]]
+    deploy:
+      placement:
+        constraints: [node.role == worker]
+      labels: [APP=powerdnsslave]
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
