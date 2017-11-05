@@ -25,6 +25,7 @@ RUN chmod 644 /etc/powerdns/pdns.d/pdns.*
 
 RUN usermod -u 1000 www-data && \
 chown -Rf www-data:www-data /srv && \
+chown -Rf www-data:www-data /etc/powerdns && \
 chmod 755 /srv
 
 RUN find /srv -type d -exec chmod 755 {} \;  && \
