@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
 
 COPY confs/apparmor_pdns /etc/apparmor.d/apparmor_pdns
 
+RUN rm -Rf /etc/powerdns/*
 COPY confs/pdns/pdns.conf /etc/powerdns/pdns.conf
 COPY confs/pdns/pdns.d/ /etc/powerdns/pdns.d/
 COPY confs/poweradmin/config.inc.php /srv/
@@ -37,8 +38,8 @@ COPY confs/supervisord/supervisord.conf /etc/supervisord.conf
 COPY start.sh /start.sh
 RUN chmod 777 /start.sh
 
-EXPOSE 53
-EXPOSE 53/udp
+EXPOSE 1025
+EXPOSE 1025/udp
 
 USER www-data
 
