@@ -41,6 +41,8 @@ RUN chmod 777 /start.sh
 EXPOSE 1025
 EXPOSE 1025/udp
 
+RUN usermod -a -G pdns www-data
+
 USER www-data
 
 CMD ["/bin/bash", "/start.sh"]
